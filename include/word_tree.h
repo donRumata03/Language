@@ -11,23 +11,29 @@ enum class word_tree_node_types
 	end
 };
 
+unordered_map<string, vector<string>> split_by_first_word(const vector<string>& strings);
+
 struct word_tree
 {
 	vector<word_tree> word_trees;
 	word_tree_node_types type = word_tree_node_types::end;
 	string m_string;
+	string total_string;
 
-	explicit word_tree(string str, const word_tree_node_types& type = word_tree_node_types::end) : type (type), m_string(std::move(str)) {}
+	explicit word_tree(const word_tree_node_types& type = word_tree_node_types::unifying, string str = "", string total_string = "") : type (type),
+				m_string(std::move(str)),
+					total_string(std::move(total_string)) {}
 
 	/**
 	 * \brief 
 	 * \param data : ¸xample: m_string = "à", data = {"", "íó", "íó òåáÿ", "òî", "òî ÷òî æå", "òî ÷òî æ" }
 	 */
-	void add_data(vector<string>& data)
+	void add_data(const vector<string>& data)
 	{
 		
-		vector<pair<string, vector<string>>> to_construct;
+		vector<pair<string, vector<string>>> to_construct = get_sorted_elements(split_by_first_word(data));
 
+		/*
 		if (is_in("", data)) {
 			to_construct.push_back({ "" , {} });
 			// word_trees.¸mplace_back("", word_tree_node_types::end);
@@ -49,7 +55,7 @@ struct word_tree
 			
 			
 			if (((el_index == data.size() - 1) || 
-				(first_word != last_word)) && !begin_flag /*for_this_word.empty()*/)
+				(first_word != last_word)) && !begin_flag)
 			{
 				if (data.size() - 1 == el_index)
 				{
@@ -68,16 +74,19 @@ struct word_tree
 			last_word = first_word;
 			begin_flag = false;
 		}
+		*/
 
+		// cout << split_by_first_word(data) << endl;
+	
 		word_trees.reserve(to_construct.size());
 		for (auto& p : to_construct)
 		{
 			if (p.first.empty())
 			{
-				word_trees.emplace_back("", word_tree_node_types::end);
+				word_trees.emplace_back(word_tree_node_types::end);
 			}
 			else {
-				auto& this_tree = word_trees.emplace_back(p.first, word_tree_node_types::simple);
+				auto& this_tree = word_trees.emplace_back(word_tree_node_types::simple, p.first, total_string + " " + p.first);
 				this_tree.add_data(p.second);
 			}
 		}
@@ -86,20 +95,68 @@ struct word_tree
 };
 
 
-inline void clear_multiwords(const vector<string>& words, const word_tree& t)
+inline vector<string> compound_collocations(const vector<string>& words, word_tree& t)
 {
-	word_tree this_node = t;
+	word_tree* this_node = &t;
 	vector<string> res;
 
-	for(auto& w : words)
+	for(size_t w_index = 0; w_index < words.size(); w_index++)
 	{
+		const string& w = words[w_index];
+		bool found = false;
+
+		vector<string> this_colloc;
+		
+		if (this_node->word_trees.empty()) {
+			res.push_back(this_node.total_string);
+			this_node = t;
+		}
+		
 		for (auto& next_node : this_node.word_trees)
 		{
-			if (1)
+			if (next_node.m_string == w)
 			{
-				
+				this_node = next_node;
+				found = true;
+				break;
 			}
 		}
+
+		if (!found) {
+			this_node = t;
+			w_index--;
+		}
+		
 	}
+
+	return res;
 }
 
+
+inline unordered_map<string, vector<string>> split_by_first_word(const vector<string>& strings)
+{
+	unordered_map<string, vector<string>> res;
+	for (auto& str : strings)
+	{
+		if (str.empty()) {
+			res[""] = {};
+			continue;
+		}
+
+
+		auto splitted = split(str);
+		string first_word = splitted[0];
+		string other_words = join(" ", Slice(splitted, 1));
+		
+		auto fnd = res.find(first_word);
+		if (fnd == res.end()) {
+			res.insert({first_word, { other_words }});
+		}
+		else
+		{
+			fnd->second.push_back(other_words);
+		}
+	}
+
+	return res;
+}

@@ -55,15 +55,45 @@ void multiword_string_test()
 
 	for (auto& p : lang.variation_getter)
 	{
-		if (split(p.first).size() > 1) {
-			ambiguous.push_back(join(" ", split(p.first)));
+		if (split_words(p.first).size() > 1) {
+			ambiguous.push_back(join(" ", split_words(p.first)));
 		}
 	}
-	sort(ambiguous.begin(), ambiguous.end());
-	word_tree w("", word_tree_node_types::unifying);
+	// sort(ambiguous.begin(), ambiguous.end());
+	word_tree w;
 	w.add_data(ambiguous);
 }
 
+
+void multiword_string_tests()
+{
+	vector<string> test1 = {
+		"",
+		"тоже"
+	};
+
+	vector<string> test2 = {
+		"тоже",
+		""
+	};
+
+
+	vector<string> test3 = {
+		"и тоже",
+		"и тоже ещё",
+		"тоже",
+		""
+	};
+
+	word_tree t(word_tree_node_types::unifying);
+	t.add_data(test3);
+
+	auto m1 = split_by_first_word(test1);
+	auto m2 = split_by_first_word(test2);
+	auto m3 = split_by_first_word(test3);
+
+	cout << m1 << endl << m2 << endl << m3;
+}
 
 
 void language_test()
@@ -123,8 +153,43 @@ void tree_construct_test()
 		"а то что же",
 		"а то что ж"
 	};
-	word_tree tr("", word_tree_node_types::unifying);
+	word_tree tr(word_tree_node_types::unifying);
 	tr.add_data(example_data);
+}
+
+void test_word_filtering()
+{
+	string test_phrase = "а ну тебя, а то! В его лицо... Они взяли и кинули камень.";
+	vector<string> parsed_phrase = {
+		"а",
+		"ну",
+		"тебя",
+		"а",
+		"то",
+		"в",
+		"его",
+		"лицо",
+		"они",
+		"взяли",
+		"и",
+		"бросили",
+		"камень",
+	};
+
+	vector<string> example_data = {
+		"в него",
+		"в его лицо",
+		"в его рожу",
+		"а ну",
+		"а ну тебя",
+		"а то",
+		"а то что же",
+		"а то что ж"
+	};
+	word_tree tr;
+	tr.add_data(example_data);
+	
+	cout << compound_collocations(parsed_phrase, tr) << endl;
 }
 
 int main()
@@ -137,9 +202,11 @@ int main()
 
 	// file_word_exist_test();
 
-	multiword_string_test();
+	// multiword_string_test();
 
 	// tree_construct_test();
+
+	test_word_filtering();
 	
 	return 0;
 }
