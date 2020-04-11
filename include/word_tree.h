@@ -108,22 +108,22 @@ inline vector<string> compound_collocations(const vector<string>& words, word_tr
 		vector<string> this_colloc;
 		
 		if (this_node->word_trees.empty()) {
-			res.push_back(this_node.total_string);
-			this_node = t;
+			res.push_back(this_node->total_string);
+			this_node = &t;
 		}
 		
-		for (auto& next_node : this_node.word_trees)
+		for (auto& next_node : this_node->word_trees)
 		{
 			if (next_node.m_string == w)
 			{
-				this_node = next_node;
+				this_node = &next_node;
 				found = true;
 				break;
 			}
 		}
 
 		if (!found) {
-			this_node = t;
+			this_node = &t;
 			w_index--;
 		}
 		
@@ -131,6 +131,7 @@ inline vector<string> compound_collocations(const vector<string>& words, word_tr
 
 	return res;
 }
+
 
 
 inline unordered_map<string, vector<string>> split_by_first_word(const vector<string>& strings)

@@ -28,14 +28,14 @@ void word_construct_test()
 
 void file_word_exist_test()
 {
-	vector<string> test_words = { "нельзя", "сопутствуемый", "несмотря" };
+	vector<string> test_words = { "лисий" };
 	string data_from_file = readFile(russian_filename);
 	cout << "In file: " << std::boolalpha << endl;
 
 	for (auto& w : test_words) {
 		auto fnd = data_from_file.find("\n" + w + "\t");
 		cout << w << " : " << (fnd != string::npos) << endl;
-		if ((fnd != string::npos)) cout << data_from_file[fnd] << ";" << Slice(data_from_file, fnd, fnd + 100) << endl;
+		if ((fnd != string::npos)) cout << data_from_file[fnd] << ";" << Slice(data_from_file, fnd, fnd + 300) << endl;
 	}
 
 	light_language lang(russian_filename);
@@ -189,7 +189,7 @@ void test_word_filtering()
 	word_tree tr;
 	tr.add_data(example_data);
 	
-	cout << compound_collocations(parsed_phrase, tr) << endl;
+	// cout << compound_collocations(parsed_phrase, tr) << endl;
 }
 
 int main()
@@ -200,13 +200,13 @@ int main()
 	// language_test();
 	// word_construct_test();
 
-	// file_word_exist_test();
+	file_word_exist_test();
 
 	// multiword_string_test();
 
 	// tree_construct_test();
 
-	test_word_filtering();
+	// test_word_filtering();
 	
 	return 0;
 }

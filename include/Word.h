@@ -150,7 +150,7 @@ struct word {
 	explicit word(const string& s) : word(split(s)) {}
 	explicit word(const vector<string>& vec);
 	
-	void print_data();
+	void print_data() const;
 	
 	[[nodiscard]] string get_type() const {
 		return word_type_to_string_converter[word_type];

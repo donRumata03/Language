@@ -22,15 +22,15 @@ public:
 public:
 	explicit light_language(const string& filename, bool enable_multithreading = true, bool enable_word_variations = true);
 
-	void print_words() { for (auto& block : blocks) { for (auto& word : block) { word.print_data(); } cout << "\n\n"; } }
+	void print_words() const { for (auto& block : blocks) { for (auto& word : block) { word.print_data(); } cout << "\n\n"; } }
 
-	word* get_word(const string& string_word);
+	[[nodiscard]] word* get_word(const string& string_word) const;
 	
-	string* get_string_main_form( const string& string_word);
-	word* get_main_form( const string& string_word);
+	[[nodiscard]] string* get_string_main_form( const string& string_word) const;
+	[[nodiscard]] word* get_main_form( const string& string_word) const;
 	
-	optional<vector<word>*> get_block( const string& string_word, size_t block_index = 0);
+	[[nodiscard]] optional<vector<word>*> get_block( const string& string_word, size_t block_index = 0) const;
 
-	vector<word*>* get_word_variations(const string& string_word);
+	[[nodiscard]] vector<word*>* get_word_variations(const string& string_word);
 	friend struct add_word_blocks;
 };

@@ -106,7 +106,7 @@ light_language::light_language(const string& filename, const bool enable_multith
 	vector<vector<vector<string>>>().swap(raw_blocks);
 }
 
-word* light_language::get_word(const string& string_word)
+word* light_language::get_word (const string& string_word) const
 {
 	assert(!has_word_variations);
 	auto founded = word_getter.find(string_word);
@@ -114,7 +114,7 @@ word* light_language::get_word(const string& string_word)
 	return nullptr;
 }
 
-word* light_language::get_main_form(const string& string_word)
+word* light_language::get_main_form(const string& string_word) const
 {
 	assert(!has_word_variations);
 	auto block = get_block(string_word);
@@ -124,7 +124,7 @@ word* light_language::get_main_form(const string& string_word)
 
 
 
-string* light_language::get_string_main_form(const string& string_word)
+string* light_language::get_string_main_form(const string& string_word) const
 {
 	assert(!has_word_variations);
 	auto founded = block_getter.find(string_word);
@@ -133,7 +133,7 @@ string* light_language::get_string_main_form(const string& string_word)
 }
 
 
-optional<vector<word>*> light_language::get_block(const string& string_word, const size_t block_index)
+optional<vector<word>*> light_language::get_block(const string& string_word, const size_t block_index) const
 {
 	if (!has_word_variations) {
 		auto f = block_getter.find(string_word);

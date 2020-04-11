@@ -113,7 +113,7 @@ word::word(const vector<string>& vec)
 
 
 
-void word::print_data() {
+void word::print_data() const {
 	if (word_type == word_types::unknown) { cout << "This is unknown word with raw text = " << raw_data << endl; return; }
 	cout << "Word: " << data << "; ";
 	cout << "Type: " << this->get_type() << "; ";
