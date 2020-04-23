@@ -8,26 +8,16 @@ initializer_list<char> spacieves = { ' ', '\n', '\t', '\r', '\v', '\a', '\f', '\
 string space_string = " \n\r\t\v\f\a\b";
 
 bool is_russian(const string& word) {
-	for (char c : word) {
-		if (!is_russian(c)) {
-			return false;
-		}
-	}
-	return true;
+	return all_of(word.begin(), word.end(), [](const char c) { return is_russian(c) || is_digit(c) || c == '-' || c == ' '; });
 }
 
 bool is_english(const string& word) {
-	for (char c : word) {
-		if (!is_english(c)) {
-			return false;
-		}
-	}
-	return true;
+	return all_of(word.begin(), word.end(), [](const char c) { return is_english(c) || is_digit(c) || c == ' ' || c == '-' || c == '`' || c == '\''; });
 }
 
 bool is_digital(const string& word) {
 	for (char c : word) {
-		if (!is_digit(c)) {
+		if (!(is_digit(c) || is_spaceive(c) || c == '-')) {
 			return false;
 		}
 	}

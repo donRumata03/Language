@@ -7,8 +7,8 @@ extern initializer_list<char> spacieves;
 extern initializer_list<char> sentence_dividers;
 extern string space_string;
 
-inline bool is_big(char c) {return (c >= 'A' && c <= 'Z') || ((c >= 'À') && (c <= 'ß')) || c == '¨'; }
-inline bool is_word_divider(char c) { return !(is_russian(c) || is_english(c) || is_digit(c)); }
+inline bool is_big(const char c) {return (c >= 'A' && c <= 'Z') || ((c >= 'À') && (c <= 'ß')) || c == '¨'; }
+inline bool is_word_divider(const char c) { return !(is_russian(c) || is_english(c) || is_digit(c)); }
 
 
 bool is_russian(const string& word);

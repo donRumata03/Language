@@ -11,7 +11,7 @@ inline void congatanate_jsons(const string& dir_name)
 	for(auto& path : filenames) {
 		auto str = readFile(path);
 		// cout << str << endl;
-		auto this_json = json::parse(str, nullptr);
+		auto this_json = Json::Load(str);
 		cout << this_json;
 	}
 }
